@@ -8,7 +8,7 @@ import math
 
 class HiperGeometric(DiscreteVariable):
 
-    def __init__(self, h: int=0, r: int=0, n: int=0):
+    def __init__(self, n: int=0, h: int=0, r: int=0):
 		# Call super class with a list of possible specifications
         super().__init__()
 
