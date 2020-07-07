@@ -3,9 +3,8 @@ import numpy as np
 
 class Reals(tuple):
 
-    def __init__(self, intll=(np.NINF, np.Inf)): 
-          
-        super().__init__(intll)
+    def __init__(self, intll=(np.NINF, np.Inf)):  
+        super().__init__()
 
     def __contains__(self, item):
 

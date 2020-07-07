@@ -6,17 +6,17 @@ import math
 
 class Naturals(OrderedSet):
 
-    def __init__(self, *values):
+    def __init__(self, span):
         # Call super method
-        super().__init__(values)
+        super().__init__(span)
 
-    def __new__(cls, *values):
+    def __new__(cls, span=[0,...,np.inf]):
         # Function that check if some value is natural value without decimals points and is non-negative
         isNatural = lambda x: (lambda f,d: d >= 0 and f == 0)(*math.modf(x))
         # Check if all values passed as parameters are naturals
-        assert all([val is not None and isNatural(val) for val in set(values) - {..., np.Inf}]), Exception
+        assert all([val is not None and isNatural(val) for val in set(span) - {..., np.Inf}]), Exception
         # Return orderedset
-        return OrderedSet.__new__(cls, values)
+        return OrderedSet.__new__(cls, span)
 
     # & does not work properly with ... in OrderedList so override class' method
     def __and__(self, other):

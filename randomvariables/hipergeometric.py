@@ -8,34 +8,34 @@ import math
 
 class HiperGeometric(DiscreteVariable):
 
-    def __init__(self, M: int=None, N: int=None, n: int=None):
+    def __init__(self, h: int=0, r: int=0, n: int=0):
 		# Call super class with a list of possible specifications
         super().__init__()
 
-        self.M = M
-
-        self.N = N
-
+        assert (lambda N: h in N and r in N and n in N)(N(0,...,np.inf)), Exception
+        # h distinct elements of type h, r = n-h elements of another type
+        self.h = h; self.r = r
+        # Cardinality
         self.n = n
 
     def pmf(self, x):
         # P(X = k) = {(N,k)(M,n-k)} / (M+N,n)
-        return (comb(self.N,x) * comb(self.M, self.n-x)) / comb(self.M+self.N, self.n) * RV.I(x in N(0,...,self.n))
+        return (comb(self.r,x) * comb(self.h, self.n-x)) / comb(self.h+self.r, self.n) * RV.I(x in N(0,...,self.n))
 
     def cdf(self, x):
         return sum([self.pmf(k) for k in range(math.floor(x) + 1)])
 
     def ev(self):
-        return (self.N / (self.N+self.M)) * self.n
+        return (self.r / (self.r+self.h)) * self.n
 
     def var(self):
-        return self.n * (self.N / (self.N+self.M)) * (1 - (self.N / (self.N+self.M))) * (1 - ((self.n-1) / (self.N+self.M-1)))
+        return self.n * (self.r / (self.r+self.h)) * (1 - (self.r / (self.r+self.h))) * (1 - ((self.n-1) / (self.r+self.h-1)))
 
     def devstd(self):
         return self.var() ** 0.5
 
     def __str__(self):
-        return f'X ~ I(M={self.M}, N={self.N}, n={self.n})'
+        return f'X ~ I(M={self.h}, N={self.r}, n={self.n})'
 
     def pmfshape(self, span, *args, **kwargs):
         # Plot mass probability function on a stick graphic
