@@ -1,11 +1,12 @@
 
-from discrete_variable import DiscreteVariable
-from random_variable import RandomVariable as RV
-from naturals import Naturals as N
-from reals import Reals as R
+from variables.discrete_variable import DiscreteVariable
+from variables.random_variable import RandomVariable as RV
+import distributions.binomial as binomial
+from sets.naturals import Naturals as N
+from sets.reals import Reals as R
+from numpy import linspace, arange, inf
 import matplotlib.pyplot as plt
-import numpy as np
-import binomial
+from random import choices
 import math
 
 class Bernoulli(binomial.Binomial):
@@ -48,7 +49,7 @@ class Bernoulli(binomial.Binomial):
 
     def fpmf(self, x: int, P: float):
         # Verify integrity of parameterss
-        assert x in N(0,...,np.Inf) and P in R(0,1)
+        assert x in N(0,...,inf) and P in R(0,1)
         # Given pmf(x) = P, return new Bernoulli with parameter p
         return Bernoulli(P if x == 0 else 1-P)
 
@@ -93,3 +94,8 @@ class Bernoulli(binomial.Binomial):
     def evshape(self, span, *args, **kwargs):
         # Plot expected value on a dashed line
         super().evshape(span, *args, **kwargs)
+
+    @staticmethod
+    def simdist(p, k=100):
+        # Return simulation of Bernoulli distribution
+        return choices([0,1], [1-p, p], k=k)

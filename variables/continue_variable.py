@@ -1,5 +1,5 @@
 
-from random_variable import RandomVariable
+from variables.random_variable import RandomVariable
 import matplotlib.pyplot as plt
 from abc import abstractmethod
 

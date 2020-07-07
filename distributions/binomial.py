@@ -1,22 +1,35 @@
 
-from discrete_variable import DiscreteVariable
-from random_variable import RandomVariable as RV
-from naturals import Naturals as N
+from variables.discrete_variable import DiscreteVariable
+from variables.random_variable import RandomVariable as RV
+import distributions.bernoulli as bernoulli
+from numpy import inf, arange, linspace
+from sets.naturals import Naturals as N
+from sets.reals import Reals as R
 import matplotlib.pyplot as plt
 from scipy.special import comb
-from reals import Reals as R
-import numpy as np
-import bernoulli 
+from random import choices
 import math
 
 
 class Binomial(DiscreteVariable):
 
+    '''
+
+        The binomial distribution with parameters n and p is the discrete probability 
+        distribution of the number of successes in a sequence of n independent experiments
+
+        The binomial distribution is frequently used to model the number of successes 
+        in a sample of size n drawn with replacement from a population of size N
+
+        X ~ B(n,p)      0 <= p <= 1, n € N
+
+    '''
+
     def __init__(self, n: int=0, p: float=0):
         # Call super class with list of specifications
         super().__init__()
         # p need to be in (0,1) and n must be natural value
-        assert p in R(0,1) and n in N(0,...,np.Inf)
+        assert p in R((0,1)) and n in N()
         # Probability parameter p of success of bernoulli event
         self.p = p 
         # Number of independents events
@@ -24,7 +37,7 @@ class Binomial(DiscreteVariable):
 
     def pmf(self, x: int) -> int:
         # P(X = k) = (n,k) * p^k * (1-p)^(n-k)
-        return (comb(self.n, x) * (self.p ** x) * ((1 - self.p) ** (self.n - x))) * RV.I(x in N(0,...,self.n))
+        return (comb(self.n, x) * (self.p ** x) * ((1 - self.p) ** (self.n - x))) * RV.I(x in N([0,...,self.n]))
 
     def cdf(self, x: (float, int)) -> int:
         # P(X <= K) = ∑ P(X=k), k ∈ [1,n]
@@ -42,17 +55,17 @@ class Binomial(DiscreteVariable):
         # DevStd(X) = Var(X)
         return self.var() ** 0.5
 
-    def fpmf(self, x: int, P: float) -> 'Binomial':
+    def __fpmf(self, x: int, P: float) -> 'Binomial':
         # n need to be defined
         assert self.n is not None, Exception
         # Verify integrity of parameters
-        assert x in N(0,...,np.Inf) and p in R(0,1)
+        assert x in N(0,...,inf) and p in R(0,1)
         # The equation to which to apply the zero theorem
         f = lambda c: (comb(self.n,x) * c**x * (1-c)**(self.n-x)) - P
         # Given pmf(x) = P, return Binomial with parameter n and p
         return Binomial(self.n, R.bfzero(f, (0,1)))
         
-    def fev(self, e: float) -> 'Binomial':
+    def __fev(self, e: float) -> 'Binomial':
         # Almost one parameter need to be defined
         assert self.n is not None or self.p is not None, Exception
         # Expected value need to be in (0,1)
@@ -64,7 +77,7 @@ class Binomial(DiscreteVariable):
         # Given E(X) and p, return new Binomial with parameter n
         return Binomial(e/self.p, self.p)
         
-    def fvar(self, v: float) -> 'Binomial':
+    def __fvar(self, v: float) -> 'Binomial':
         # Almost one parameter need to be specified
         assert self.n is not None or self.p is not None, Exception
         # Variance need to be in (0,1)
@@ -76,7 +89,7 @@ class Binomial(DiscreteVariable):
         # Given Var(X) and p, return Binomial with parameter n
         return Binomial(v/(self.p*(1-self.p)), self.p)
         
-    def fdevstd(self, d: float):
+    def __fdevstd(self, d: float):
         # Verify integrity of value d passed
         assert d in R(0,1), Exception
         # Given DevStd(X), return new Binomial with parameter p or n
@@ -109,6 +122,15 @@ class Binomial(DiscreteVariable):
     def evshape(self, span, *args, **kwargs):
         # Plot expected value on a dashed line
         super().evshape(span, *args, **kwargs)
+
+    @staticmethod
+    def simdist(p, n, k=100):
+        # Generate range of values
+        val = linspace(0,n,dtype=int,endpoint=True)
+        # Each with same probability of mass function
+        probs = [Binomial(n,p).pmf(i) for i in val]
+        # Return n random values, 1 with probability p and 0 with probability 1-p
+        return choices(val, probs, k=k)
 
 
         

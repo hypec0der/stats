@@ -26,15 +26,15 @@ class RandomVariable():
 		pass
 
 	@abstractmethod
-	def fev(self, e):
+	def __fev(self, e):
 		pass
 
 	@abstractmethod
-	def fvar(self, v):
+	def __fvar(self, v):
 		pass
 
 	@abstractmethod
-	def fdevstd(self, d):
+	def __fdevstd(self, d):
 		pass
 
 	def cdfshape(self, x, *args, **kwargs):

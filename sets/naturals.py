@@ -6,7 +6,7 @@ import math
 
 class Naturals(OrderedSet):
 
-    def __init__(self, span):
+    def __init__(self, span=[0,...,np.inf]):
         # Call super method
         super().__init__(span)
 
