@@ -10,7 +10,7 @@ class Reals(tuple):
 
         if item is None: return False
 
-        return (lambda a,b: item > a and item < b)(*self)
+        return (lambda a,b: item >= a and item <= b)(*self)
 
     @staticmethod
     def bfzero(f, intll, step=10**(-1), bias=10**(-10)):

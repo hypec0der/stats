@@ -9,6 +9,41 @@ import matplotlib.pyplot as plt
 from random import choices
 import math
 
+
+# Return simulation of Bernoulli distribution
+def simdist(p, size=100):
+    # return 0 with probability 1-p and 1 with probability p for an amount of k times
+    return choices([0,1], [1-p, p], k=size)
+
+# Given pmf(x) = P, return new Bernoulli with parameter p
+def rvspmf(x: int, P: float):
+    # Verify integrity of parameters
+    assert x in N([0,...,inf]) and P in R((0,1))
+    # p = 
+    return Bernoulli(P if x == 0 else 1-P)
+
+# Given E(X), return new Bernoulli with parameter p
+def rvsev(P):
+    # Excpected value need to be in (0,1)
+    assert P in R((0,1)), Exception
+    # p = ev
+    return Bernoulli(P)
+
+# Given Var(X), return Bernoulli with parameter p
+def rvsvar(P):
+    # Variance need to be in (0,1)
+    assert P in R((0,1)), Exception
+    # p = 1 + (1 - (4*var)**0.5)) / 2)
+    return Bernoulli((1 + (1-(4*P))**0.5) / 2)
+
+# Given DevStd(X), return Bernoulli with parameter p
+def rvsdevstd(P: float) -> 'Bernoulli':
+    # Verify integrity of value d passed
+    assert P in R((0,1)), Exception
+    # p = (1 + (1 - (4*var)**0.5)) / 2)) ** 0.5
+    return Bernoulli(rvsvar(P**2))
+
+
 class Bernoulli(binomial.Binomial):
 
     ''' 
@@ -47,30 +82,6 @@ class Bernoulli(binomial.Binomial):
         # Given X~B(p) then Std(X) = √(Var(X))
         return self.var() ** 0.5
 
-    def fpmf(self, x: int, P: float):
-        # Verify integrity of parameterss
-        assert x in N(0,...,inf) and P in R(0,1)
-        # Given pmf(x) = P, return new Bernoulli with parameter p
-        return Bernoulli(P if x == 0 else 1-P)
-
-    def fev(self, e):
-        # Excpected value need to be in (0,1)
-        assert e in R(0,1), Exception
-        # Given E(X), return new Bernoulli with parameter p
-        return Bernoulli(e)
-
-    def fvar(self, v):
-        # Variance need to be in (0,1)
-        assert  v in R(0,1), Exception
-        # Given Var(X), return Bernoulli with parameter p
-        return Bernoulli((1 + (1-(4*v))**0.5) / 2)
-
-    def fdevstd(self, d: float) -> 'Bernoulli':
-        # Verify integrity of value d passed
-        assert d in R(0,1), Exception
-        # Given DevStd(X), return Bernoulli with parameter p
-        return Bernoulli(self.fvar(d**2))
-
     def __add__(self, other: ('Binomial', 'Bernoulli')) -> 'Binomial':
         # Given X,Y independent => X + Y ~ B(2, p)
         return binomial.Binomial(1 + other.n, self.p)
@@ -95,7 +106,6 @@ class Bernoulli(binomial.Binomial):
         # Plot expected value on a dashed line
         super().evshape(span, *args, **kwargs)
 
-    @staticmethod
-    def simdist(p, k=100):
-        # Return simulation of Bernoulli distribution
-        return choices([0,1], [1-p, p], k=k)
+    def simulate(self, size=100):
+        # Return simulation of this distribution
+        return choices([0,1], [1-self.p, self.p], k=size)

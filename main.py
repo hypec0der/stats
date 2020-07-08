@@ -1,17 +1,20 @@
 
 import distributions.bernoulli as bernoulli
 import distributions.binomial as binomial
+import distributions.geometric as geometric
+from distributions.uniform import Uniform
 from statsmodels.graphics.gofplots import qqplot_2samples
+import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import mean
 import scipy.stats
 
 
-tests = scipy.stats.distributions.binom.rvs(p=0.75, n=50, size = 10000)
+X = binomial.Binomial(10, 0.5)
 
-data = binomial.Binomial.simdist(0.75, n=50, k=10000)
+binomial_tests = binomial.simdist(0.5, 10, size=30)
 
-qqplot_2samples(tests, np.array(data))
+print(binomial_tests)
 
-plt.show()
+print(X.simulate(size=30))

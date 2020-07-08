@@ -26,23 +26,15 @@ class RandomVariable():
 		pass
 
 	@abstractmethod
-	def __fev(self, e):
+	def simulate(self, *args):
 		pass
-
-	@abstractmethod
-	def __fvar(self, v):
-		pass
-
-	@abstractmethod
-	def __fdevstd(self, d):
-		pass
-
+	
+	# Plot distribution probability function on curved graphic
 	def cdfshape(self, x, *args, **kwargs):
-		# Plot distribution probability function on curved graphic
 		return plt.plot(x, list(map(self.cdf, x)), *args, **kwargs)
-
+	
+	# Plot distribution probability function on curved graphic
 	def evshape(self, x, *args, **kwargs):
-		# Plot distribution probability function on curved graphic
 		return plt.plot(x, [self.ev() for i in x], *args, **kwargs)
 
 	@staticmethod
@@ -50,25 +42,6 @@ class RandomVariable():
 		return 1 if boolean is True else 0
 
 	@staticmethod
-	def Var(model, params):
-		return model(*params).var()
+	def qqplot(data1, data2):
+		pass
 
-	@staticmethod
-	def E(model, params):
-		return model(*params).ev()
-
-	@staticmethod
-	def DevStd(model, params):
-		return model(*params).devstd()
-
-	@staticmethod
-	def InvVar(model, params, var):
-		return model(*params).fvar(var)
-
-	@staticmethod
-	def InvE(model, params, ev):
-		return model(*params).fev(ev)
-
-	@staticmethod
-	def InvDevStd(model, params, devstd):
-		return model(*params).fdevstd(devstd)

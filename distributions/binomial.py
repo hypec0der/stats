@@ -11,6 +11,45 @@ from random import choices
 import math
 
 
+def simdist(p, n, size=100):
+    # Generate range of values
+    val = linspace(0,n,dtype=int,endpoint=True)
+    # Each with same probability of mass function
+    probs = (lambda dist: [dist.pmf(i) for i in val])(Binomial(n,p))
+    # Return n random values, 1 with probability p and 0 with probability 1-p
+    return choices(val, probs, k=size)
+
+def rvspmf(self, x: int, n: int, P: float) -> 'Binomial':
+    # Verify integrity of parameters
+    assert x in N([0,...,inf]) and n in N([0,...,inf]) and P in R((0,1))
+    # The equation to which to apply the zero theorem
+    f = lambda c: (comb(n,x) * c**x * (1-c)**(n-x)) - P
+    # Given pmf(x) = P, return Binomial with parameter n and p
+    return Binomial(n, R.bfzero(f, (0,1)))
+        
+def rvsev(self,P: float, n: int=None, p: float=None) -> 'Binomial':
+    # Almost one parameter need to be defined
+    assert (n is not None or p is not None) and P in R((0,1)), Exception
+    # Given E(X) and n, return new Binomial with parameter p
+    if p is None: return Binomial(n, P/n) 
+    # Given E(X) and p, return new Binomial with parameter n
+    return Binomial(P/p, p)
+        
+def rvsvar(self, P: float, n: int=None, p: float=None) -> 'Binomial':
+    # Almost one parameter need to be specified
+    assert (n is not None or p is not None) and P in R((0,1)), Exception        
+    # Given Var(X) and n, return Binomial with parameter p
+    if p is None: return Binomial(n, (1 + (1-(4*(P/n)))**0.5) / 2)
+    # Given Var(X) and p, return Binomial with parameter n
+    return Binomial(P/(p*(1-p)), p)
+        
+def rvsdevstd(self, P: float):
+    # Verify integrity of value d passed
+    assert P in R((0,1)), Exception
+    # Given DevStd(X), return new Binomial with parameter p or n
+    return self.fvar(P**2)
+
+
 class Binomial(DiscreteVariable):
 
     '''
@@ -55,46 +94,6 @@ class Binomial(DiscreteVariable):
         # DevStd(X) = Var(X)
         return self.var() ** 0.5
 
-    def __fpmf(self, x: int, P: float) -> 'Binomial':
-        # n need to be defined
-        assert self.n is not None, Exception
-        # Verify integrity of parameters
-        assert x in N(0,...,inf) and p in R(0,1)
-        # The equation to which to apply the zero theorem
-        f = lambda c: (comb(self.n,x) * c**x * (1-c)**(self.n-x)) - P
-        # Given pmf(x) = P, return Binomial with parameter n and p
-        return Binomial(self.n, R.bfzero(f, (0,1)))
-        
-    def __fev(self, e: float) -> 'Binomial':
-        # Almost one parameter need to be defined
-        assert self.n is not None or self.p is not None, Exception
-        # Expected value need to be in (0,1)
-        assert e in R(0,1), Exception
-        # if p is not defined
-        if self.p is None: 
-            # Given E(X) and n, return new Binomial with parameter p
-            return Binomial(self.n, e/self.n) 
-        # Given E(X) and p, return new Binomial with parameter n
-        return Binomial(e/self.p, self.p)
-        
-    def __fvar(self, v: float) -> 'Binomial':
-        # Almost one parameter need to be specified
-        assert self.n is not None or self.p is not None, Exception
-        # Variance need to be in (0,1)
-        assert v in R(0,1), Exception
-        # if p is not defined
-        if self.p is None: 
-            # Given Var(X) and n, return Binomial with parameter p
-            return Binomial(self.n, (1 + (1-(4*(v/self.n)))**0.5) / 2)
-        # Given Var(X) and p, return Binomial with parameter n
-        return Binomial(v/(self.p*(1-self.p)), self.p)
-        
-    def __fdevstd(self, d: float):
-        # Verify integrity of value d passed
-        assert d in R(0,1), Exception
-        # Given DevStd(X), return new Binomial with parameter p or n
-        return self.fvar(d**2)
-
     def __add__(self, other: ('Binomial', 'Bernoulli')):
         # Given X~B(n,p), Y~(m,p) independents => X + Y ~ B(n+m, p)
         return Binomial(self.n + other.n, self.p)
@@ -123,15 +122,13 @@ class Binomial(DiscreteVariable):
         # Plot expected value on a dashed line
         super().evshape(span, *args, **kwargs)
 
-    @staticmethod
-    def simdist(p, n, k=100):
+    def simulate(self, size=100):
         # Generate range of values
-        val = linspace(0,n,dtype=int,endpoint=True)
+        val = linspace(0,self.n,dtype=int,endpoint=True)
         # Each with same probability of mass function
-        probs = [Binomial(n,p).pmf(i) for i in val]
+        probs = [self.pmf(i) for i in val]
         # Return n random values, 1 with probability p and 0 with probability 1-p
-        return choices(val, probs, k=k)
-
+        return choices(val, probs, k=size)
 
         
 

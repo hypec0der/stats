@@ -36,7 +36,7 @@ class Geometric(DiscreteVariable):
 
     def pmf(self, x: int) -> int:
         # P(X = x) = p(1 - p)^x
-        return (((1 - self.p) ** x) * self.p) * RV.I(x in N([1,...,inf]))
+        return (((1 - self.p) ** x) * self.p) * RV.I(x in N())
 
     def cdf(self, x: int) -> int:
         return sum([self.pmf(k) for k in range(floor(x) + 1)])
@@ -78,14 +78,6 @@ class Geometric(DiscreteVariable):
         # Plot expected value on a dashed line
         super().evshape(span, *args, **kwargs)
 
-    @staticmethod
-    def simdist(p, n, k=100):
-        # Generate range of values
-        val = linspace(0,n,dtype=int,endpoint=True)
-        # Each with same probability of mass function
-        probs = [Geometric(p).pmf(i) for i in val]
-        # Return n random values, 1 with probability p and 0 with probability 1-p
-        return choices(val, probs, k=k)
 
 
 
