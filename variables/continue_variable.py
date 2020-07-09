@@ -16,3 +16,7 @@ class ContinueVariable(RandomVariable):
     def pdfshape(self, span, *args, **kwargs):
         # Plot mass probability function on a stick graphic
         return plt.plot(x, list(map(self.pdf, x)), *args, **kwargs)
+
+	# Plot distribution probability function on curved graphic
+	def cdfshape(self, x, *args, **kwargs):
+		return plt.plot(x, list(map(self.cdf, x)), *args, **kwargs)

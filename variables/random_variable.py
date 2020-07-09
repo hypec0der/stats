@@ -30,10 +30,6 @@ class RandomVariable():
 		pass
 	
 	# Plot distribution probability function on curved graphic
-	def cdfshape(self, x, *args, **kwargs):
-		return plt.plot(x, list(map(self.cdf, x)), *args, **kwargs)
-	
-	# Plot distribution probability function on curved graphic
 	def evshape(self, x, *args, **kwargs):
 		return plt.plot(x, [self.ev() for i in x], *args, **kwargs)
 

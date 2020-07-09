@@ -18,6 +18,10 @@ class DiscreteVariable(RandomVariable):
 	def pmfshape(self, span, *args, **kwargs):
 		# Plot mass probability function on a stick graphic
 		return plt.stem(span, [self.pmf(i) for i in span], use_line_collection=True, *args, **kwargs)
+
+	# Plot distribution probability function on curved graphic
+	def cdfshape(self, x, *args, **kwargs):
+		return plt.step(x, list(map(self.cdf, x)), *args, **kwargs)
 		
 
 
