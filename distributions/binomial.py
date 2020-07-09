@@ -2,22 +2,19 @@
 from variables.discrete_variable import DiscreteVariable
 from variables.random_variable import RandomVariable as RV
 import distributions.bernoulli as bernoulli
-from numpy import inf, arange, linspace
 from sets.naturals import Naturals as N
 from sets.reals import Reals as R
 import matplotlib.pyplot as plt
 from scipy.special import comb
 from random import choices
-import math
+from math import inf, floor
 
 
 def simdist(p, n, size=100):
-    # Generate range of values
-    val = linspace(0,n,dtype=int,endpoint=True)
     # Each with same probability of mass function
-    probs = (lambda dist: [dist.pmf(i) for i in val])(Binomial(n,p))
+    probs = (lambda dist: [dist.pmf(i) for i in range(0,n)])(Binomial(n,p))
     # Return n random values, 1 with probability p and 0 with probability 1-p
-    return choices(val, probs, k=size)
+    return choices(range(0,n), probs, k=size)
 
 def rvspmf(self, x: int, n: int, P: float) -> 'Binomial':
     # Verify integrity of parameters
@@ -80,7 +77,7 @@ class Binomial(DiscreteVariable):
 
     def cdf(self, x: (float, int)) -> int:
         # P(X <= K) = ∑ P(X=k), k ∈ [1,n]
-        return sum([self.pmf(k) for k in range(math.floor(x) + 1)]) + RV.I(x > self.n)
+        return sum([self.pmf(k) for k in range(floor(x) + 1)]) + RV.I(x > self.n)
 
     def ev(self) -> float:
         # E(X) = ∑ (k * P(X=k)), k ∈ [1,n] = np
@@ -123,12 +120,10 @@ class Binomial(DiscreteVariable):
         super().evshape(span, *args, **kwargs)
 
     def simulate(self, size=100):
-        # Generate range of values
-        val = linspace(0,self.n,dtype=int,endpoint=True)
         # Each with same probability of mass function
-        probs = [self.pmf(i) for i in val]
+        probs = [self.pmf(i) for i in self.samplespace]
         # Return n random values, 1 with probability p and 0 with probability 1-p
-        return choices(val, probs, k=size)
+        return choices(self.samplespace, probs, k=size)
 
         
 

@@ -9,12 +9,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy import mean
 import scipy.stats
+from distributions.exponential import Exponential
 
 
-X = binomial.Binomial(10, 0.5)
 
-binomial_tests = binomial.simdist(0.5, 10, size=30)
+X = Exponential(0.3)
 
-print(binomial_tests)
-
-print(X.simulate(size=30))
+print(X.simulate())

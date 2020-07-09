@@ -3,7 +3,14 @@
 from variables.random_variable import RandomVariable as RV
 from variables.continue_variable import ContinueVariable
 from sets.reals import Reals as R
-from math import inf
+from random import expovariate
+from math import inf, e
+
+def simdist(y, size=100):
+
+    assert y in R([0,1])
+    # Return n random values, 1 with probability p and 0 with probability 1-p
+    return [expovariate(y) for y in range(100)]
 
 
 class Exponential(ContinueVariable):
@@ -18,10 +25,10 @@ class Exponential(ContinueVariable):
 
 
     def pdf(self, x):
-        return (self.y * (np.e ** (-self.y * x))) * RV.I(x in self.samplespace)
+        return (self.y * (e ** (-self.y * x))) * RV.I(x in self.samplespace)
 
     def cdf(self, x):
-        return (1 - (np.e ** (-self.y * x))) * RV.I(x in self.samplespace)
+        return (1 - (e ** (-self.y * x))) * RV.I(x in self.samplespace)
 
     def ev(self):
         return 1 / self.y
@@ -43,3 +50,6 @@ class Exponential(ContinueVariable):
     def evshape(self, span, *args, **kwargs):
         # Plot expected value on a dashed line
         super().evshape(span, *args, **kwargs)
+
+    def simulate(self, size=100):
+        return [expovariate(self.y) for i in range(size)]
