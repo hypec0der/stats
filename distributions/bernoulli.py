@@ -64,7 +64,7 @@ class Bernoulli(binomial.Binomial):
 
     def pmf(self, x: int) -> int:
         # Given X~B(p) then P(X = k) = p if k == 1, 1-p otherwise
-        return (self.p if x == 1 else (1-self.p)) * RV.I(x in N(0,1))
+        return (self.p if x == 1 else (1-self.p)) * RV.I(x in self.samplespace)
 
     def cdf(self, x: int) -> int:
         # Given X~B(p) then P(X <= K) = ∑ P(X = k)

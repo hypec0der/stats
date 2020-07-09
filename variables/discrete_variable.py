@@ -5,22 +5,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
+
 class DiscreteVariable(RandomVariable):
 	
-	def __init__(self):
-		super().__init__()
+	def __init__(self, samplespace):
+		super().__init__(samplespace)
 	
 	@abstractmethod
 	def pmf(self, x):
 		pass
-	
-	@staticmethod
-	def fpmf(self, x, c):
-		pass
-
-	@staticmethod
-	def InvPmf(model, params, x, c):
-		return model(*params).fpmf(x,c)
 
 	def pmfshape(self, span, *args, **kwargs):
 		# Plot mass probability function on a stick graphic

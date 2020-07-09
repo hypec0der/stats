@@ -6,13 +6,13 @@ from abc import abstractmethod
 
 class ContinueVariable(RandomVariable):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, samplespace):
+        super().__init__(samplespace)
 
     @abstractmethod
     def pdf(self, x):
         pass
 
-    def pdfshape(self, x, span):
+    def pdfshape(self, span, *args, **kwargs):
         # Plot mass probability function on a stick graphic
-        return plt.plot(span(x), [self.pdf(i) for i in span(x)])
+        return plt.plot(x, list(map(self.pdf, x)), *args, **kwargs)

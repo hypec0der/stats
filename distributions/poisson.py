@@ -5,8 +5,8 @@ from naturals import Naturals as N
 from reals import Reals as R
 import matplotlib.pyplot as plt
 from scipy.special import lambertw
-import numpy as np
-import math
+from math import inf
+
 
 class Poisson(DiscreteVariable):
 
@@ -15,13 +15,15 @@ class Poisson(DiscreteVariable):
 	
 	def __init__(self, y: float=None):
 		# Call super class with a list of possible specifications (infinite, numerative specifications)
-		super().__init__()
+		super().__init__(samplespace=N([0,...,inf]))
+
+		assert y in R([0,1])
 		# Lambda parameter referers to events that occur in average 
 		self.y = y
 			
 	def pmf(self, x: int):
 		# P(X = k) = (e^(-ℷ) * ℷ^k) / k!
-		return (((math.e ** (- self.y)) * (self.y ** x)) / math.factorial(x)) * RV.I(x in N(0,...,np.inf))
+		return (((math.e ** (- self.y)) * (self.y ** x)) / math.factorial(x)) * RV.I(x in self.samplespace)
 		
 	def cdf(self, x):
 		# P(X <= K) = ∑ P(X = k)

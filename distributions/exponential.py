@@ -1,23 +1,27 @@
 
 
-from random_variable import RandomVariable as RV
-from continue_variable import ContinueVariable
-import numpy as np
+from variables.random_variable import RandomVariable as RV
+from variables.continue_variable import ContinueVariable
+from sets.reals import Reals as R
+from math import inf
 
 
 class Exponential(ContinueVariable):
 
-    def __init__(self, y):
+    def __init__(self, y: float):
 
-        super().__init__([(0, np.Inf), {0}])
+        super().__init__(samplespace=R((0,inf)))
+
+        assert y in R((0,1)), Exception
 
         self.y = y
 
+
     def pdf(self, x):
-        return (self.y * (np.e ** (-self.y * x))) * RV.I(x, self.specs)
+        return (self.y * (np.e ** (-self.y * x))) * RV.I(x in self.samplespace)
 
     def cdf(self, x):
-        return (1 - (np.e ** (-self.y * x))) * RV.I(x, [self.specs, ])
+        return (1 - (np.e ** (-self.y * x))) * RV.I(x in self.samplespace)
 
     def ev(self):
         return 1 / self.y
@@ -25,13 +29,17 @@ class Exponential(ContinueVariable):
     def var(self):
         return 1 / (self.y ** 2)
 
-    def dStd(self):
+    def devstd(self):
         return 1 / self.y
 
-    def pdfshape(self, x, span=lambda x: np.arange(0,x,0.01)):
+    def pdfshape(self, span, *args, **kwargs):
         # Plot mass probability function on a stick graphic
-        return super().pdfshape(x, span)
-        
-    def cdfshape(self, x, span=lambda x: np.arange(0,x,0.01)):
+        return super().pdfshape(span, *args, **kwargs)
+	
+    def cdfshape(self, span, *args, **kwargs):
         # Plot distribution probability function on curved graphic
-        return super().cdfshape(x, span)
+        return super().cdfshape(span, *args, **kwargs)
+
+    def evshape(self, span, *args, **kwargs):
+        # Plot expected value on a dashed line
+        super().evshape(span, *args, **kwargs)

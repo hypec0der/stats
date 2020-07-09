@@ -5,7 +5,7 @@ from numpy import inf, arange, linspace
 from sets.naturals import Naturals as N
 from sets.reals import Reals as R
 from random import choices
-from math import floor
+from math import floor, inf
 
 class Geometric(DiscreteVariable):
 
@@ -28,15 +28,15 @@ class Geometric(DiscreteVariable):
 
     def __init__(self, p):
         # Call super class with a list of possible specifications (infinite, numerative specifications)
-        super().__init__()
+        super().__init__(samplespace=N())
 
-        assert p in R((0,1)), Exception
+        assert p in R([0,1]), Exception
         # Probability parameter p of success of bernoulli event
         self.p = p
 
     def pmf(self, x: int) -> int:
         # P(X = x) = p(1 - p)^x
-        return (((1 - self.p) ** x) * self.p) * RV.I(x in N())
+        return (((1 - self.p) ** x) * self.p) * RV.I(x in self.samplespace)
 
     def cdf(self, x: int) -> int:
         return sum([self.pmf(k) for k in range(floor(x) + 1)])

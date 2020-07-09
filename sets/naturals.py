@@ -35,9 +35,13 @@ class Naturals():
         return False         
 
     def __len__(self):
+        # If inf in naturals, then return infinite as count
         if inf in iter(self): return inf
+        # Count all specification in range between a ... b
         elif self & {...}: return len((lambda a,b: range(a,b))(*Naturals.get_span(self.span)))
+        # Count every single value
         else: return len(self.span)
 
     def __iter__(self):
+        # Return iterator over all values
         return iter(self.span)

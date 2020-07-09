@@ -6,8 +6,8 @@ import math
 
 class RandomVariable():
 		
-	def __init__(self):
-		pass
+	def __init__(self, samplespace):
+		self.samplespace = samplespace
 
 	@abstractmethod
 	def cdf(self, x):

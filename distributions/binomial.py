@@ -66,9 +66,9 @@ class Binomial(DiscreteVariable):
 
     def __init__(self, n: int=0, p: float=0):
         # Call super class with list of specifications
-        super().__init__()
+        super().__init__(samplespace=N([0,...,n]))
         # p need to be in (0,1) and n must be natural value
-        assert p in R((0,1)) and n in N()
+        assert p in R([0,1]) and n in N()
         # Probability parameter p of success of bernoulli event
         self.p = p 
         # Number of independents events
@@ -76,7 +76,7 @@ class Binomial(DiscreteVariable):
 
     def pmf(self, x: int) -> int:
         # P(X = k) = (n,k) * p^k * (1-p)^(n-k)
-        return (comb(self.n, x) * (self.p ** x) * ((1 - self.p) ** (self.n - x))) * RV.I(x in N([0,...,self.n]))
+        return (comb(self.n, x) * (self.p ** x) * ((1 - self.p) ** (self.n - x))) * RV.I(x in self.samplespace)
 
     def cdf(self, x: (float, int)) -> int:
         # P(X <= K) = ∑ P(X=k), k ∈ [1,n]

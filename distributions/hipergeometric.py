@@ -3,16 +3,15 @@ from random_variable import RandomVariable as RV
 from discrete_variable import DiscreteVariable
 from naturals import Naturals as N
 from scipy.special import comb
-import numpy as np
-import math
+from math import inf
 
 class HiperGeometric(DiscreteVariable):
 
     def __init__(self, n: int=0, h: int=0, r: int=0):
 		# Call super class with a list of possible specifications
-        super().__init__()
+        super().__init__(samplespace=N([0,...,n]))
 
-        assert (lambda N: h in N and r in N and n in N)(N(0,...,np.inf)), Exception
+        assert (lambda N: h in N and r in N and n in N)(N([0,...,np.inf])), Exception
         # h distinct elements of type h, r = n-h elements of another type
         self.h = h; self.r = r
         # Cardinality
@@ -20,7 +19,7 @@ class HiperGeometric(DiscreteVariable):
 
     def pmf(self, x):
         # P(X = k) = {(N,k)(M,n-k)} / (M+N,n)
-        return (comb(self.h,x) * comb(self.r, self.n-x)) / comb(self.r+self.h, self.n) * RV.I(x in N(0,...,self.n))
+        return (comb(self.h,x) * comb(self.r, self.n-x)) / comb(self.r+self.h, self.n) * RV.I(x in self.samplespace)
 
     def cdf(self, x):
         return sum([self.pmf(k) for k in range(math.floor(x) + 1)])
