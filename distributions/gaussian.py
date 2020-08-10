@@ -45,11 +45,11 @@ class Gaussian(ContinueVariable):
 
     def isnorm(self):
         return True if self.mu == 0 and self.sigma == 1 else False
-
+        
     def pdfshape(self, span, *args, **kwargs):
         # Plot mass probability function on a stick graphic
         return super().pdfshape(span, *args, **kwargs)
-	
+        
     def cdfshape(self, span, *args, **kwargs):
         # Plot distribution probability function on curved graphic
         return super().cdfshape(span, *args, **kwargs)

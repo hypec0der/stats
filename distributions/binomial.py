@@ -14,7 +14,7 @@ def simdist(p, n, size=100):
     # Each with same probability of mass function
     probs = (lambda dist: [dist.pmf(i) for i in range(0,n)])(Binomial(n,p))
     # Return n random values, 1 with probability p and 0 with probability 1-p
-    return choices(range(0,n), probs, k=size)
+    return choices(range(0, n), probs, k=size)
 
 def rvspmf(self, x: int, n: int, P: float) -> 'Binomial':
     # Verify integrity of parameters
