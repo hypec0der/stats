@@ -12,9 +12,9 @@ from math import inf, floor
 
 def simdist(p, n, size=100):
     # Each with same probability of mass function
-    probs = (lambda dist: [dist.pmf(i) for i in range(0,n)])(Binomial(n,p))
+    weigths = (lambda dist: [dist.pmf(i) for i in range(0,n)])(Binomial(n,p))
     # Return n random values, 1 with probability p and 0 with probability 1-p
-    return choices(range(0, n), probs, k=size)
+    return choices(range(0, n), weigths, k=size)
 
 def rvspmf(self, x: int, n: int, P: float) -> 'Binomial':
     # Verify integrity of parameters
@@ -53,6 +53,9 @@ class Binomial(DiscreteVariable):
 
         The binomial distribution with parameters n and p is the discrete probability 
         distribution of the number of successes in a sequence of n independent experiments
+
+        La distribuzione binomiale di parametro n e p è la distribuzione di probabilità discreta
+        che descrive il numero di successi in un processo di bernoulli
 
         The binomial distribution is frequently used to model the number of successes 
         in a sample of size n drawn with replacement from a population of size N
@@ -107,7 +110,7 @@ class Binomial(DiscreteVariable):
         # Return binomial distribution as an array of bernoulli independent variable
         return [bernoulli.Bernoulli(self.p) for i in range(self.n)]
 
-    def pmfshape(self, span, *args, **kwargs):
+    def pmfshape(self, span=None, *args, **kwargs):
         # Plot mass probability function on a stick graphic
         return super().pmfshape(span, *args, **kwargs)
 	
@@ -121,9 +124,9 @@ class Binomial(DiscreteVariable):
 
     def simulate(self, size=100):
         # Each with same probability of mass function
-        probs = [self.pmf(i) for i in self.samplespace]
+        weigths = [self.pmf(i) for i in self.samplespace]
         # Return n random values, 1 with probability p and 0 with probability 1-p
-        return choices(self.samplespace, probs, k=size)
+        return choices(self.samplespace, weigths, k=size)
 
         
 

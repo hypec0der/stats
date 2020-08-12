@@ -4,13 +4,14 @@ from variables.random_variable import RandomVariable as RV
 from variables.continue_variable import ContinueVariable
 from sets.reals import Reals as R
 from random import expovariate
-from math import inf, e
+from math import inf, e as exp
+
 
 def simdist(y, size=100):
 
     assert y in R([0,1])
     # Return n random values, 1 with probability p and 0 with probability 1-p
-    return [expovariate(y) for y in range(100)]
+    return [expovariate(y) for i in range(size)]
 
 
 class Exponential(ContinueVariable):
@@ -25,10 +26,10 @@ class Exponential(ContinueVariable):
 
 
     def pdf(self, x):
-        return (self.y * (e ** (-self.y * x))) * RV.I(x in self.samplespace)
+        return (self.y * (exp ** (-self.y * x))) * RV.I(x in self.samplespace)
 
     def cdf(self, x):
-        return (1 - (e ** (-self.y * x))) * RV.I(x in self.samplespace)
+        return (1 - (exp ** (-self.y * x))) * RV.I(x in self.samplespace)
 
     def ev(self):
         return 1 / self.y

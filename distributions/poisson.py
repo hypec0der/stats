@@ -1,11 +1,18 @@
 
-from discrete_variable import DiscreteVariable
-from random_variable import RandomVariable as RV
-from naturals import Naturals as N
-from reals import Reals as R
+from variables.discrete_variable import DiscreteVariable
+from variables.random_variable import RandomVariable as RV
+from sets.naturals import Naturals as N
+from sets.reals import Reals as R
+from random import choices
 import matplotlib.pyplot as plt
-from scipy.special import lambertw
-from math import inf
+from math import inf, floor, factorial, e as exp
+
+
+def simdist(y, limit, size=100):
+	
+	weigths = (lambda dist: [dist.pmf(i) for i in range(0, limit)])(Poisson(y))
+
+	return choices(range(0, limit), weigths, k=size)
 
 
 class Poisson(DiscreteVariable):
@@ -17,17 +24,17 @@ class Poisson(DiscreteVariable):
 		# Call super class with a list of possible specifications (infinite, numerative specifications)
 		super().__init__(samplespace=N([0,...,inf]))
 
-		assert y in R([0,1])
+		assert y in N([1,...,inf])
 		# Lambda parameter referers to events that occur in average 
 		self.y = y
 			
 	def pmf(self, x: int):
 		# P(X = k) = (e^(-ℷ) * ℷ^k) / k!
-		return (((math.e ** (- self.y)) * (self.y ** x)) / math.factorial(x)) * RV.I(x in self.samplespace)
+		return (((exp ** (- self.y)) * (self.y ** x)) / factorial(x)) * RV.I(x in self.samplespace)
 		
 	def cdf(self, x):
 		# P(X <= K) = ∑ P(X = k)
-		return sum([self.pmf(k) for k in range(math.floor(x) + 1)])
+		return sum([self.pmf(k) for k in range(floor(x) + 1)])
 		
 	def ev(self):
 		# E(X) = ∑ (k * P(X = k)) = ℷ
@@ -77,3 +84,5 @@ class Poisson(DiscreteVariable):
 		# Plot expected value on a dashed line
 		super().evshape(span, *args, **kwargs)
 
+	def simulate(self, size=100):
+		pass

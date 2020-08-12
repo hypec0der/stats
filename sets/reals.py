@@ -1,16 +1,25 @@
 
 import numpy as np
 
+
 class Reals(tuple):
 
-    def __init__(self, intll=(np.NINF, np.Inf)):  
+    def __init__(self, intll=(np.NINF, np.Inf)): 
+
         super().__init__()
 
-    def __contains__(self, item):
 
+    def __contains__(self, item):
+        # If item is not Real value
         if item is None: return False
 
         return (lambda a,b: item >= a and item <= b)(*self)
+
+
+    def __rdiv__(self, item):
+
+        pass
+    
 
     @staticmethod
     def bfzero(f, intll, step=10**(-1), bias=10**(-10)):
@@ -31,6 +40,7 @@ class Reals(tuple):
                 if f(a)*f(b) < 0:
                     # Call bisection algorithm
                     return Reals.bisection(f, (a,b), bias)
+
 
     @staticmethod
     def bisection(f, intll, bias=10**(-10)):
