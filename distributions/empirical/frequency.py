@@ -12,7 +12,7 @@ def frqs(data, cumulative=False, normalized=True):
         
             freqs = list(frqs(data, normalized=False).values())
 
-            return {k: (lambda i: sum(freqs[:i]))(i) for i,k in enumerate(set(data))}
+            return {k: (lambda i: sum(freqs[:i+1]))(i) for i,k in enumerate(set(data))}
         
         return {k: data.count(k) for k in set(data)}
 
@@ -20,7 +20,7 @@ def frqs(data, cumulative=False, normalized=True):
             
         freqs = list(frqs(data).values())
 
-        return {k: (lambda i: sum(freqs[:i]))(i) for i,k in enumerate(set(data))}
+        return {k: (lambda i: sum(freqs[:i+1]))(i) for i,k in enumerate(set(data))}
 
     # Frequencies compared to the total
     return {k: data.count(k)/float(len(data)) for k in set(data)}

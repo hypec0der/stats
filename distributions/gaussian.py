@@ -14,6 +14,7 @@ def simdist(mu=0, sigma=1, size=100):
 
 class Gaussian(ContinueVariable):
 
+
     def __init__(self, mu, sigma):
 
         super().__init__(samplespace=R((-inf, inf)))
@@ -24,39 +25,50 @@ class Gaussian(ContinueVariable):
         # Standard deviation
         self.sigma = sigma
 
+
     def pdf(self, x, normalized=False):
         return (1/((2*pi)**0.5)) * 1/self.sigma * (e ** ((-1/2) * ((x - self.mu)/self.sigma) ** 2))
 
+
     def cdf(self, x):
-        return integrate.quad(Gaussian.normal().pdf, -inf, (x - self.mu) / self.sigma)
+        return integrate.quad(Gaussian.Normal().pdf, -inf, (x - self.mu) / self.sigma)
+
 
     def ev(self):
         return self.mu
 
+
     def var(self):
         return self.sigma ** 2
+
 
     def devstd(self):
         return self.sigma
 
+
     @staticmethod
-    def normal():
+    def Normal():
         return Gaussian(0,1)
 
-    def isnorm(self):
+
+    def isnormal(self):
         return True if self.mu == 0 and self.sigma == 1 else False
         
+
     def pdfshape(self, span, *args, **kwargs):
         # Plot mass probability function on a stick graphic
         return super().pdfshape(span, *args, **kwargs)
         
+
     def cdfshape(self, span, *args, **kwargs):
         # Plot distribution probability function on curved graphic
         return super().cdfshape(span, *args, **kwargs)
 
+
     def evshape(self, span, *args, **kwargs):
         # Plot expected value on a dashed line
         super().evshape(span, *args, **kwargs)
+
 
     def __add__(self, other):
 
@@ -68,11 +80,14 @@ class Gaussian(ContinueVariable):
         # X ~ G(u,o), b ∈ R => (X+b)~G(u+b,o)
         return Gaussian(self.mu + other, self.sigma)
 
+
     def __mul__(self, a):
 
         assert isinstance(a, (float, int)), Exception
         # X ~ G(u,o), a ∈ R => (aX)~G(a*u,|a|o)
         return Gaussian(a * self.mu, abs(a) * self.sigma)
 
+
     def simulate(self, size=100):
+        
         return [gauss(self.mu, self.sigma) for i in range(size)]
