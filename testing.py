@@ -1,19 +1,19 @@
 
-from distributions.empirical.pivot import mode, quantile
+from distributions.empirical.pivot import mode, quantile, mean, qqplot
 from distributions.empirical.frequency import frqs
-from distributions.empirical.leak import var
+from distributions.empirical.leak import var, distboxplot
 import distributions.bernoulli as bernoulli
 import distributions.binomial as binomial
+import matplotlib.pyplot as plt
 from random import choices
 import numpy as np
 
+array1 = binomial.simdist(p=0.15, n=10, size=12)
 
-array1 = binomial.simdist(p=0.44, n=10, size=10)
+array2 = binomial.simdist(p=0.40, n=10, size=12)
 
-print(array1)
+print(sorted(array1))
 
-print(frqs(array1, cumulative=True))
+distboxplot(array1)
 
-print(np.quantile(array1, 0.25))
-
-print(quantile(array1, 0.25))
+plt.show()

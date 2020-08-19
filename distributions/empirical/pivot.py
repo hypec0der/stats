@@ -1,4 +1,5 @@
 
+import matplotlib.pyplot as plt
 from sets.reals import Reals as R
 from math import ceil, floor
 
@@ -41,9 +42,24 @@ def quantile(data, q):
     
     assert data is not None and q in R((0,1)), Exception
 
-    return (lambda data: data[ceil(len(data)*q): floor(len(data)*(1-q))])(sorted(data))
+    # Riordino l'array
+    data = sorted(data)
+
+    s,e = (ceil(len(data)*q), len(data) - floor(len(data)*(1-q)))
+
+    # Interpolazione
+    return (lambda s,e: (s*q + e*(1-q)))(*data[s-1: e+1])
 
 
-def qqplot(data1, data2):
+def percentile(data, p):
 
-    pass
+    return quantile(data, p/100)
+
+
+def distqqplot(data1, data2, gap=10):
+
+    x = [percentile(data1, i) for i in range(0,100,gap)]
+
+    y = [percentile(data2, i) for i in range(0,100,gap)]
+
+    plt.plot(x,y)

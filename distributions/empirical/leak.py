@@ -1,6 +1,6 @@
 
-from distributions.empirical.pivot import mean
-
+from distributions.empirical.pivot import mean, quantile
+from matplotlib.pyplot import boxplot
 
 def var(data, distance=lambda x,p: pow(x-p, 2), pivot=mean):
 
@@ -16,6 +16,9 @@ def devstd(data, distance=lambda x,p: pow(x-p, 2), pivot=mean):
 
 def interquartilegap(data):
 
-    pass
+    return quantile(data, 0.75) - quantile(data, 0.25) 
 
 
+def distboxplot(data, *args, **kwargs):
+
+    boxplot(data, *args, **kwargs)
