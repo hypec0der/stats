@@ -8,12 +8,13 @@ from math import inf
 class HiperGeometric(DiscreteVariable):
 
     def __init__(self, n: int=0, h: int=0, r: int=0):
-		# Call super class with a list of possible specifications
+	# Call super class with a list of possible specifications
         super().__init__(samplespace=N([0,...,n]))
 
         assert (lambda N: h in N and r in N and n in N)(N([0,...,inf])), Exception
         # h distinct elements of type h, r = n-h elements of another type
-        self.h = h; self.r = r
+        self.h = h
+	self.r = r
         # Cardinality
         self.n = n
 
