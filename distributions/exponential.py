@@ -9,7 +9,7 @@ from math import inf, e as exp
 
 def simdist(y, size=100):
 
-    assert y in R([0,1])
+    assert y > 0
     # Return n random values, 1 with probability p and 0 with probability 1-p
     return [expovariate(y) for i in range(size)]
 
@@ -20,7 +20,7 @@ class Exponential(ContinueVariable):
 
         super().__init__(samplespace=R((0,inf)))
 
-        assert y in R((0,1)), Exception
+        assert y > 0, Exception
 
         self.y = y
 
