@@ -1,7 +1,7 @@
 
-from random_variable import RandomVariable as RV
-from discrete_variable import DiscreteVariable
-from naturals import Naturals as N
+from distributions.random_variable import RandomVariable as RV
+from distributions.discrete_variable import DiscreteVariable
+from sets.naturals import Naturals as N
 from scipy.special import comb
 from math import inf
 
