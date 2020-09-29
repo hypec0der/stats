@@ -11,7 +11,7 @@ class HiperGeometric(DiscreteVariable):
 		# Call super class with a list of possible specifications
         super().__init__(samplespace=N([0,...,n]))
 
-        assert (lambda N: h in N and r in N and n in N)(N([0,...,np.inf])), Exception
+        assert (lambda N: h in N and r in N and n in N)(N([0,...,inf])), Exception
         # h distinct elements of type h, r = n-h elements of another type
         self.h = h; self.r = r
         # Cardinality
